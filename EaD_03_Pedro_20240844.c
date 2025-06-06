@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "fila.h"
+
+#define MAX 100
 
 typedef struct {
     char dado[50];
@@ -19,6 +20,7 @@ void inicializa_fila_prioridade(FilaPrioridade* f) {
 
 int fila_enqueue_prioridade(FilaPrioridade* f, ItemPrioridade item) {
     if (f->tamanho >= MAX) return 0;
+
     int i = f->tamanho - 1;
     while (i >= 0 && item.prioridade < f->dados[i].prioridade) {
         f->dados[i + 1] = f->dados[i];
@@ -30,7 +32,12 @@ int fila_enqueue_prioridade(FilaPrioridade* f, ItemPrioridade item) {
 }
 
 ItemPrioridade fila_dequeue_prioridade(FilaPrioridade* f) {
-    return f->dados[--f->tamanho];
+    ItemPrioridade item = f->dados[0];
+    for (int i = 0; i < f->tamanho - 1; i++) {
+        f->dados[i] = f->dados[i + 1];
+    }
+    f->tamanho--;
+    return item;
 }
 
 void adicionar_tarefa_manual(FilaPrioridade* fila) {
